@@ -14,7 +14,7 @@ app = FastAPI(
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Next.js default port
+    allow_origins=["*"],  # Allow ALL origins for debugging
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

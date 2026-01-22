@@ -17,6 +17,18 @@ async def get_dashboard_stats(db: Session = Depends(get_db)):
     service = AnalysisService(db)
     return service.get_dashboard_stats()
 
+@router.get("/dashboard/trends", response_model=List[MonthlyData])
+async def get_dashboard_trends(db: Session = Depends(get_db)):
+    """Get aggregate monthly trends for dashboard chart"""
+    service = AnalysisService(db)
+    return service.get_aggregate_trends()
+
+@router.get("/dashboard/distribution")
+async def get_dashboard_distribution(db: Session = Depends(get_db)):
+    """Get distribution stats for charts"""
+    service = AnalysisService(db)
+    return service.get_distribution_stats()
+
 @router.get("/new", response_model=PaginatedResponse)
 async def get_new_customers(
     page: int = Query(1, ge=1),

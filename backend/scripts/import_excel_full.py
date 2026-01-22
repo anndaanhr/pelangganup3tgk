@@ -157,8 +157,16 @@ def import_full():
     print("=" * 70)
     
     project_root = Path(__file__).resolve().parent.parent.parent
-    excel_2024 = project_root / "data" / "JUAL PERPELANGGAN 2024 BL.xlsx"
-    excel_2025 = project_root / "data" / "JUAL PERPELANGGAN 2025 BL.xlsx"
+    
+    # Cek di root dulu, kalau tidak ada baru cek di folder data
+    excel_2024 = project_root / "JUAL PERPELANGGAN 2024 BL.xlsx"
+    excel_2025 = project_root / "JUAL PERPELANGGAN 2025 BL.xlsx"
+    
+    if not excel_2024.exists():
+        excel_2024 = project_root / "data" / "JUAL PERPELANGGAN 2024 BL.xlsx"
+        
+    if not excel_2025.exists():
+        excel_2025 = project_root / "data" / "JUAL PERPELANGGAN 2025 BL.xlsx"
     
     # Create tables
     print("\n[1/6] Creating/updating database tables...")
@@ -211,6 +219,14 @@ def import_full():
                 if chunk_df.empty:
                     break
                 
+                # Clean IDPEL in the chunk
+                chunk_df = chunk_df.dropna(subset=['IDPEL'])
+                chunk_df = chunk_df[pd.to_numeric(chunk_df['IDPEL'], errors='coerce').notna()]
+                
+                if chunk_df.empty:
+                    skip_rows += len(chunk_df) # Should reflect original length, but for simplicity just continue loop if empty
+                    continue
+
                 batch_count += 1
                 batch_inserted = 0
                 
@@ -236,11 +252,12 @@ def import_full():
                 
                 # Progress update
                 elapsed = time.time() - start_time
-                if total_rows_2024:
+                if total_rows_2024 and total_inserted <= total_rows_2024:
                     progress = (total_inserted / total_rows_2024) * 100
                     print(f"  Progress: {total_inserted:,} / {total_rows_2024:,} ({progress:.1f}%) | "
                           f"Batch: {batch_count} | Time: {elapsed:.1f}s", end='\r')
                 else:
+                    # Fallback if total is wrong or exceeded
                     print(f"  Processed: {total_inserted:,} rows | Batch: {batch_count} | Time: {elapsed:.1f}s", end='\r')
                 
                 # Jika batch lebih kecil dari BATCH_SIZE, berarti sudah sampai akhir
@@ -291,6 +308,14 @@ def import_full():
                 if chunk_df.empty:
                     break
                 
+                # Clean IDPEL in the chunk
+                chunk_df = chunk_df.dropna(subset=['IDPEL'])
+                chunk_df = chunk_df[pd.to_numeric(chunk_df['IDPEL'], errors='coerce').notna()]
+                
+                if chunk_df.empty:
+                    skip_rows += len(chunk_df) # Should reflect original length, but for simplicity just continue loop if empty
+                    continue
+
                 batch_count += 1
                 batch_inserted = 0
                 
@@ -316,7 +341,7 @@ def import_full():
                 
                 # Progress update
                 elapsed = time.time() - start_time
-                if total_rows_2025:
+                if total_rows_2025 and total_inserted <= total_rows_2025:
                     progress = (total_inserted / total_rows_2025) * 100
                     print(f"  Progress: {total_inserted:,} / {total_rows_2025:,} ({progress:.1f}%) | "
                           f"Batch: {batch_count} | Time: {elapsed:.1f}s", end='\r')

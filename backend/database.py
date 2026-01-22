@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Hardcode untuk testing cepat - pastikan database dan user sudah dibuat
-DATABASE_URL = os.getenv("DATABASE_URL") or "postgresql://pln_user:pln_password@localhost:5432/pln_trend_db"
+DATABASE_URL = os.getenv("DATABASE_URL") or "postgresql://postgres:postgres@localhost:5432/pln_trend_db"
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

@@ -10,6 +10,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import pandas as pd
+import numpy as np
 from sqlalchemy.orm import Session
 from database import SessionLocal, engine
 from models import Base, Customer2024, Customer2025
@@ -133,8 +134,16 @@ def import_data():
     
     # Baca file Excel
     project_root = Path(__file__).resolve().parent.parent.parent
-    excel_2024_path = project_root / "data" / "JUAL PERPELANGGAN 2024 BL.xlsx"
-    excel_2025_path = project_root / "data" / "JUAL PERPELANGGAN 2025 BL.xlsx"
+    
+    # Cek di root dulu, kalau tidak ada baru cek di folder data
+    excel_2024_path = project_root / "JUAL PERPELANGGAN 2024 BL.xlsx"
+    excel_2025_path = project_root / "JUAL PERPELANGGAN 2025 BL.xlsx"
+    
+    if not excel_2024_path.exists():
+        excel_2024_path = project_root / "data" / "JUAL PERPELANGGAN 2024 BL.xlsx"
+        
+    if not excel_2025_path.exists():
+        excel_2025_path = project_root / "data" / "JUAL PERPELANGGAN 2025 BL.xlsx"
     
     print(f"Looking for Excel files in: {project_root}")
     print(f"File 2024 exists: {excel_2024_path.exists()}")
@@ -161,6 +170,13 @@ def import_data():
     sampled_idpel = sample_customers(df2024_norm, df2025_norm, target_count=50)
     
     # Filter data berdasarkan IDPEL yang di-sample
+    # Clean IDPEL - Remove NaNs and convert to integer safely
+    df2024_norm = df2024_norm.dropna(subset=['IDPEL'])
+    df2024_norm = df2024_norm[np.isfinite(pd.to_numeric(df2024_norm['IDPEL'], errors='coerce'))]
+    
+    df2025_norm = df2025_norm.dropna(subset=['IDPEL'])
+    df2025_norm = df2025_norm[np.isfinite(pd.to_numeric(df2025_norm['IDPEL'], errors='coerce'))]
+
     df2024_sampled = df2024_norm[df2024_norm['IDPEL'].astype(int).isin(sampled_idpel)]
     df2025_sampled = df2025_norm[df2025_norm['IDPEL'].astype(int).isin(sampled_idpel)]
     
