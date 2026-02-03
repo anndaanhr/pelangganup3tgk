@@ -46,7 +46,7 @@ connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection re
 The above exception was the direct cause of the following exception:
 
 Traceback (most recent call last):
-  File "C:\laragon\www\pln2juta\backend\services\analysis.py", line 204, in get_all_customers
+  File "C:\laragon\www\pln2juta\backend\services\analysis.py", line 292, in get_all_customers
     total = query.count()
   File "C:\laragon\bin\python\python-3.10\lib\site-packages\sqlalchemy\orm\query.py", line 3132, in count
     self._legacy_from_self(col).enable_eagerloads(False).scalar()
