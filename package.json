@@ -8,6 +8,7 @@
     "start": "cd frontend && npm start",
     "backend": "cd backend && uvicorn main:app --reload"
   },
-  "dependencies": {}
+  "dependencies": {
+    "bcrypt": "^6.0.0"
+  }
 }
-

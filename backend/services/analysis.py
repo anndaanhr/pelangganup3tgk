@@ -58,28 +58,53 @@ class AnalysisService:
         
         return total if total > 0 else None
 
-    def get_dashboard_stats(self):
+    def get_dashboard_stats(self, unitup: Optional[int] = None):
         """Get dashboard overview statistics"""
-        # Try Disk Cache First
+        # Try Disk Cache First using composite key
+        cache_key = f'dashboard_stats_{unitup}' if unitup else 'dashboard_stats'
         cache = load_cache()
-        if 'dashboard_stats' in cache:
-            print("DISK CACHE HIT: Dashboard Stats")
+        if cache_key in cache:
+            # print("DISK CACHE HIT: Dashboard Stats")
             # Reconstruct Pydantic model from JSON dict
             from schemas import SummaryStats
-            return SummaryStats(**cache['dashboard_stats'])
+            return SummaryStats(**cache[cache_key])
+            
+        return self._calculate_dashboard_stats(unitup, cache_key)
+    
+    def _calculate_dashboard_stats(self, unitup: Optional[int], cache_key: str):
 
-        print("CALCULATING: Dashboard Stats (This may take a while)...")
+        if unitup:
+            print(f"CALCULATING: Dashboard Stats for ULP {unitup}...")
+        else:
+            print("CALCULATING: Dashboard Stats (This may take a while)...")
+            
         from schemas import SummaryStats
         from sqlalchemy import func
         
         # 1. Total Customers
-        total_2024 = self.db.query(Customer2024).count()
-        total_2025 = self.db.query(Customer2025).count()
+        q24 = self.db.query(Customer2024)
+        q25 = self.db.query(Customer2025)
+        
+        if unitup:
+            q24 = q24.filter(Customer2024.unitup == unitup)
+            q25 = q25.filter(Customer2025.unitup == unitup)
+            
+        total_2024 = q24.count()
+        total_2025 = q25.count()
         
         # 2. Customer Migration
-        active_customers = self.db.query(func.count(Customer2025.idpel))\
-            .join(Customer2024, Customer2025.idpel == Customer2024.idpel)\
-            .scalar() or 0
+        # 2. Customer Migration
+        active_query = self.db.query(func.count(Customer2025.idpel))\
+            .join(Customer2024, Customer2025.idpel == Customer2024.idpel)
+            
+        if unitup:
+            # Ensure both satisfy unitup
+            active_query = active_query.filter(
+                Customer2025.unitup == unitup,
+                Customer2024.unitup == unitup
+            )
+            
+        active_customers = active_query.scalar() or 0
         
         new_customers = total_2025 - active_customers
         lost_customers = total_2024 - active_customers
@@ -122,10 +147,15 @@ class AnalysisService:
             # 2. Revenue Calculation Strategy:
             # Group by Tarif -> Sum Energy -> Multiply by Tarif Rate
             
-            stmt = self.db.query(
+            query = self.db.query(
                 model.tarif,
                 *[func.sum(getattr(model, col)) for col in months_cols]
-            ).group_by(model.tarif)
+            )
+            
+            if unitup:
+                query = query.filter(model.unitup == unitup)
+                
+            stmt = query.group_by(model.tarif)
             
             results = stmt.all()
             
@@ -178,12 +208,16 @@ class AnalysisService:
         )
         
         # Save to Disk Cache (Serialize Pydantic to dict)
-        save_cache_to_disk('dashboard_stats', result.model_dump())
+        
+        # Save to Disk Cache (Serialize Pydantic to dict)
+        save_cache_to_disk(cache_key, result.model_dump())
         return result
     
     def get_new_customers(self, page: int = 1, page_size: int = 50,
                           tarif: Optional[str] = None, jenis: Optional[str] = None,
-                          layanan: Optional[str] = None) -> PaginatedResponse:
+                          layanan: Optional[str] = None, gardu: Optional[str] = None,
+                          unitup: Optional[str] = None,
+                          daya: Optional[int] = None) -> PaginatedResponse:
         """Get customers present in 2025 but not 2024"""
         try:
             # Efficient way: LEFT JOIN where NULL
@@ -194,6 +228,9 @@ class AnalysisService:
             if tarif: query = query.filter(Customer2025.tarif == tarif)
             if jenis: query = query.filter(Customer2025.jenis == jenis)
             if layanan: query = query.filter(Customer2025.layanan == layanan)
+            if gardu: query = query.filter(Customer2025.gardu == gardu)
+            if unitup: query = query.filter(Customer2025.unitup == unitup)
+            if daya is not None: query = query.filter(Customer2025.daya == daya)
             
             total = query.count()
             offset = (page - 1) * page_size
@@ -227,7 +264,9 @@ class AnalysisService:
 
     def get_lost_customers(self, page: int = 1, page_size: int = 50,
                            tarif: Optional[str] = None, jenis: Optional[str] = None,
-                           layanan: Optional[str] = None) -> PaginatedResponse:
+                           layanan: Optional[str] = None, gardu: Optional[str] = None,
+                           unitup: Optional[str] = None,
+                           daya: Optional[int] = None) -> PaginatedResponse:
         """Get customers present in 2024 but not 2025"""
         try:
             # LEFT JOIN 2024 -> 2025 where 2025 is NULL
@@ -238,6 +277,9 @@ class AnalysisService:
             if tarif: query = query.filter(Customer2024.tarif == tarif)
             if jenis: query = query.filter(Customer2024.jenis == jenis)
             if layanan: query = query.filter(Customer2024.layanan == layanan)
+            if gardu: query = query.filter(Customer2024.gardu == gardu)
+            if unitup: query = query.filter(Customer2024.unitup == unitup)
+            if daya is not None: query = query.filter(Customer2024.daya == daya)
             
             total = query.count()
             offset = (page - 1) * page_size
@@ -271,7 +313,9 @@ class AnalysisService:
 
     def get_all_customers(self, year: int, page: int = 1, page_size: int = 50,
                          tarif: Optional[str] = None, jenis: Optional[str] = None,
-                         layanan: Optional[str] = None, gardu: Optional[str] = None) -> PaginatedResponse:
+                         layanan: Optional[str] = None, gardu: Optional[str] = None,
+                         unitup: Optional[str] = None,
+                         daya: Optional[int] = None) -> PaginatedResponse:
         """Get all customers untuk tahun tertentu dengan filter"""
         try:
             if year == 2024:
@@ -288,6 +332,10 @@ class AnalysisService:
                 query = query.filter(Customer2024.layanan == layanan if year == 2024 else Customer2025.layanan == layanan)
             if gardu:
                 query = query.filter(Customer2024.gardu == gardu if year == 2024 else Customer2025.gardu == gardu)
+            if unitup:
+                query = query.filter(Customer2024.unitup == unitup if year == 2024 else Customer2025.unitup == unitup)
+            if daya is not None:
+                query = query.filter(Customer2024.daya == daya if year == 2024 else Customer2025.daya == daya)
             
             total = query.count()
             offset = (page - 1) * page_size
@@ -323,19 +371,59 @@ class AnalysisService:
                 f.write(error_msg)
             raise e
 
-    def get_aggregate_trends(self) -> List[MonthlyData]:
+    def get_monthly_trends(self, idpel: int) -> List[MonthlyData]:
+        """Get monthly consumption trends for one customer (untuk halaman detail)."""
+        from schemas import MonthlyData
+        customer_2024 = self.db.query(Customer2024).filter(Customer2024.idpel == idpel).first()
+        customer_2025 = self.db.query(Customer2025).filter(Customer2025.idpel == idpel).first()
+        if not customer_2024 and not customer_2025:
+            return []
+        mapping = [
+            ('Jan', 'jan_2024', 'jan_2025'),
+            ('Feb', 'feb_2024', 'feb_2025'),
+            ('Mar', 'mar_2024', 'mar_2025'),
+            ('Apr', 'apr_2024', 'apr_2025'),
+            ('Mei', 'may_2024', 'may_2025'),
+            ('Jun', 'jun_2024', 'jun_2025'),
+            ('Jul', 'jul_2024', 'jul_2025'),
+            ('Agu', 'aug_2024', 'aug_2025'),
+            ('Sep', 'sep_2024', 'sep_2025'),
+            ('Okt', 'oct_2024', 'oct_2025'),
+            ('Nov', 'nov_2024', 'nov_2025'),
+            ('Des', 'dec_2024', 'dec_2025'),
+        ]
+        result = []
+        for label, col_24, col_25 in mapping:
+            v24 = getattr(customer_2024, col_24, None) if customer_2024 else None
+            v25 = getattr(customer_2025, col_25, None) if customer_2025 else None
+            result.append(MonthlyData(
+                month=label,
+                value_2024=float(v24) if v24 is not None else None,
+                value_2025=float(v25) if v25 is not None else None,
+            ))
+        return result
+
+    def get_aggregate_trends(self, unitup: Optional[int] = None) -> List[MonthlyData]:
         """Get data tren bulanan agregat (Total semua pelanggan)"""
         # Ensure Schema is imported
         from schemas import MonthlyData
         
         # Try Disk Cache First
+        cache_key = f'dashboard_trends_{unitup}' if unitup else 'dashboard_trends'
         cache = load_cache()
-        if 'dashboard_trends' in cache:
+        if cache_key in cache:
             # if loaded from json, it's a list of dicts.
-            if isinstance(cache['dashboard_trends'], list):
-               return [MonthlyData(**item) for item in cache['dashboard_trends']]
+            if isinstance(cache[cache_key], list):
+               return [MonthlyData(**item) for item in cache[cache_key]]
             
-        print("CALCULATING: Aggregate Trends...")
+        return self._calculate_aggregate_trends(unitup, cache_key)
+
+    def _calculate_aggregate_trends(self, unitup: Optional[int], cache_key: str):
+        if unitup:
+            print(f"CALCULATING: Aggregate Trends for ULP {unitup}...")
+        else:
+            print("CALCULATING: Aggregate Trends...")
+            
         from sqlalchemy import func
         
         # Mapping nama kolom
@@ -351,8 +439,10 @@ class AnalysisService:
         
         # Helper to get sum
         def get_sums(model, cols):
-            exprs = [func.sum(getattr(model, col)).label(col) for col in cols]
-            return self.db.query(*exprs).first()
+            query = self.db.query(*[func.sum(getattr(model, col)).label(col) for col in cols])
+            if unitup:
+                query = query.filter(model.unitup == unitup)
+            return query.first()
             
         sums_2024 = get_sums(Customer2024, months_2024_cols)
         sums_2025 = get_sums(Customer2025, months_2025_cols)
@@ -388,28 +478,43 @@ class AnalysisService:
             
         # Serialize list of models
         serialized = [item.model_dump() for item in trends]
-        save_cache_to_disk('dashboard_trends', serialized)
+        # Serialize list of models
+        serialized = [item.model_dump() for item in trends]
+        save_cache_to_disk(cache_key, serialized)
         return trends
 
-    def get_distribution_stats(self):
+    def get_distribution_stats(self, unitup: Optional[int] = None):
         """Get distribusi data berdasarkan tarif dan layanan (2025)"""
         # Try Disk Cache First
+        cache_key = f'distribution_stats_{unitup}' if unitup else 'distribution_stats'
         cache = load_cache()
-        if 'distribution_stats' in cache:
-             return cache['distribution_stats']
+        if cache_key in cache:
+             return cache[cache_key]
 
-        print("CALCULATING: Distribution Stats...")
+        return self._calculate_distribution_stats(unitup, cache_key)
+
+    def _calculate_distribution_stats(self, unitup: Optional[int], cache_key: str):
+        print(f"CALCULATING: Distribution Stats (ULP={unitup})...")
         from sqlalchemy import func, desc
         from database import SessionLocal
         
         # 1. Distribusi Tarif
         # Group by Tarif and count
-        tarif_dist = self.db.query(
+        # 1. Distribusi Tarif
+        # Group by Tarif and count
+        q_tarif = self.db.query(
             Customer2025.tarif, 
             func.count(Customer2025.idpel).label('count')
-        ).group_by(Customer2025.tarif).order_by(desc('count')).limit(5).all()
+        )
+        if unitup:
+            q_tarif = q_tarif.filter(Customer2025.unitup == unitup)
+            
+        tarif_dist = q_tarif.group_by(Customer2025.tarif).order_by(desc('count')).limit(5).all()
         
-        total_customers = self.db.query(Customer2025).count()
+        q_total = self.db.query(Customer2025)
+        if unitup:
+            q_total = q_total.filter(Customer2025.unitup == unitup)
+        total_customers = q_total.count()
         
         tarif_data = []
         if total_customers > 0:
@@ -428,10 +533,14 @@ class AnalysisService:
         months_2025 = ['dec_2024', 'jan_2025', 'feb_2025', 'mar_2025', 'apr_2025', 'may_2025',
                        'jun_2025', 'jul_2025', 'aug_2025', 'sep_2025', 'oct_2025', 'nov_2025', 'dec_2025']
         
-        layanan_dist = self.db.query(
+        q_layanan = self.db.query(
             Customer2025.layanan,
             func.sum(sum_cols(Customer2025, months_2025)).label('total_revenue')
-        ).group_by(Customer2025.layanan).all()
+        )
+        if unitup:
+            q_layanan = q_layanan.filter(Customer2025.unitup == unitup)
+            
+        layanan_dist = q_layanan.group_by(Customer2025.layanan).all()
         
         layanan_data = []
         total_revenue_all = Decimal(0)
@@ -459,6 +568,77 @@ class AnalysisService:
             'total_revenue_2025': float(total_revenue_all)
         }
         
-        save_cache_to_disk('distribution_stats', result)
+        save_cache_to_disk(cache_key, result)
         return result
 
+
+    def get_usage_distribution_comparison(self, unitup: Optional[int] = None):
+        """
+        Get aggregated usage (kWh) by Tarif, Jenis, and Layanan for 2024 vs 2025.
+        """
+        cache_key = f'usage_comparison_{unitup}' if unitup else 'usage_comparison'
+        cache = load_cache()
+        if cache_key in cache:
+             return cache[cache_key]
+
+        return self._calculate_usage_comparison(unitup, cache_key)
+
+    def _calculate_usage_comparison(self, unitup: Optional[int], cache_key: str):
+        print(f"CALCULATING: Usage Comparison Stats (ULP={unitup})...")
+        from sqlalchemy import func
+        
+        month_cols_2024 = ['dec_2023', 'jan_2024', 'feb_2024', 'mar_2024', 'apr_2024', 'may_2024',
+                           'jun_2024', 'jul_2024', 'aug_2024', 'sep_2024', 'oct_2024', 'nov_2024', 'dec_2024']
+        month_cols_2025 = ['dec_2024', 'jan_2025', 'feb_2025', 'mar_2025', 'apr_2025', 'may_2025',
+                           'jun_2025', 'jul_2025', 'aug_2025', 'sep_2025', 'oct_2025', 'nov_2025', 'dec_2025']
+
+        def sum_cols_expr(model, cols):
+            return sum(func.coalesce(getattr(model, col), 0) for col in cols)
+
+        def aggregate_by(model, group_col, month_cols):
+            query = self.db.query(
+                getattr(model, group_col),
+                func.sum(sum_cols_expr(model, month_cols))
+            )
+            if unitup:
+                query = query.filter(model.unitup == unitup)
+                
+            results = query.group_by(getattr(model, group_col)).all()
+            return {row[0]: float(row[1] or 0) for row in results if row[0]}
+
+        # Aggregate 2024
+        tarif_2024 = aggregate_by(Customer2024, 'tarif', month_cols_2024)
+        jenis_2024 = aggregate_by(Customer2024, 'jenis', month_cols_2024)
+        layanan_2024 = aggregate_by(Customer2024, 'layanan', month_cols_2024)
+
+        # Aggregate 2025
+        tarif_2025 = aggregate_by(Customer2025, 'tarif', month_cols_2025)
+        jenis_2025 = aggregate_by(Customer2025, 'jenis', month_cols_2025)
+        layanan_2025 = aggregate_by(Customer2025, 'layanan', month_cols_2025)
+
+        def merge_data(data_2024, data_2025):
+            keys = set(data_2024.keys()) | set(data_2025.keys())
+            result = []
+            for k in keys:
+                # Filter out null/empty keys
+                if not k: continue
+                val24 = data_2024.get(k, 0)
+                val25 = data_2025.get(k, 0)
+                # Only include significant data
+                if val24 > 0 or val25 > 0:
+                    result.append({
+                        'label': k,
+                        'value_2024': val24,
+                        'value_2025': val25
+                    })
+            # Sort by 2025 value desc
+            return sorted(result, key=lambda x: x['value_2025'], reverse=True)
+
+        result = {
+            'tarif': merge_data(tarif_2024, tarif_2025),
+            'jenis': merge_data(jenis_2024, jenis_2025),
+            'layanan': merge_data(layanan_2024, layanan_2025)
+        }
+
+        save_cache_to_disk(cache_key, result)
+        return result

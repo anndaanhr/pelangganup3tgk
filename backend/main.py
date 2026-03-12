@@ -21,8 +21,10 @@ app.add_middleware(
 )
 
 # Include routers
-from api.routes import customers
+from api.routes import customers, analytics, auth
 app.include_router(customers.router)
+app.include_router(analytics.router)
+app.include_router(auth.router)
 
 @app.get("/")
 async def root():
