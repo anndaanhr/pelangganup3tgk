@@ -69,3 +69,11 @@ class Customer2025(Base):
     nov_2025 = Column(NUMERIC(15, 2))
     dec_2025 = Column(NUMERIC(15, 2))
 
+
+class User(Base):
+    __tablename__ = "users"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, index=True)
+    hashed_password = Column(String)
+    role = Column(String, default="user") # 'admin' or 'user'
