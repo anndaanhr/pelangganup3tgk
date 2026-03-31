@@ -32,7 +32,16 @@ async def root():
 
 @app.get("/health")
 async def health():
-    return {"status": "healthy"}
+    try:
+        from database import SessionLocal
+        from sqlalchemy import text
+        db = SessionLocal()
+        db.execute(text("SELECT 1"))
+        db.close()
+        db_status = "connected"
+    except Exception as e:
+        db_status = f"error: {str(e)}"
+    return {"status": "healthy", "database": db_status}
 
 if __name__ == "__main__":
     import uvicorn
