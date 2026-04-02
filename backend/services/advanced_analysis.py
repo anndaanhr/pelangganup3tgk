@@ -16,6 +16,11 @@ class AdvancedAnalysisService:
         Get Top N customers by total consumption in 2025.
         Returns list of dict with idpel, nama, total_kwh, contribution_percent.
         """
+        from services.analysis import load_cache, save_cache_to_disk
+        cache_key = f"pareto_l{limit}_u{unitup}"
+        cache = load_cache()
+        if cache_key in cache: return cache[cache_key]
+        
         # Calculate total consumption per customer
         # Note: We sum individual months for accuracy, or use a pre-calculated logic if available.
         # Assuming we need to sum columns dynamically or use a simpler approximation if fields don't exist
@@ -78,6 +83,7 @@ class AdvancedAnalysisService:
                 "cumulative_percentage": round(cumulative_percent, 4)
             })
             
+        save_cache_to_disk(cache_key, data)
         return data
 
     def get_anomalies_zero_usage(self, page: int = 1, limit: int = 50, unitup: int = None) -> Dict[str, Any]:
@@ -140,16 +146,17 @@ class AdvancedAnalysisService:
         try:
             # Cache Key logic
             cache_key = f"high_variance_{unitup if unitup else 'all'}_{min_pct}_{max_pct}"
-            current_time = time.time()
             
-            # Check Cache
-            cached = _MEMORY_CACHE.get(cache_key)
-            if cached and (current_time - cached['timestamp'] < _CACHE_TTL_SECONDS):
+            # Check Disk Cache
+            from services.analysis import load_cache, save_cache_to_disk
+            cache = load_cache()
+            if cache_key in cache:
+                cached_data = cache[cache_key]
                 return {
-                    "data": cached['data'][(page - 1) * limit : page * limit],
-                    "total": len(cached['data']),
+                    "data": cached_data[(page - 1) * limit : page * limit],
+                    "total": len(cached_data),
                     "page": page,
-                    "pages": (len(cached['data']) + limit - 1) // limit if cached['data'] else 1
+                    "pages": (len(cached_data) + limit - 1) // limit if cached_data else 1
                 }
 
             month_cols = [
@@ -269,11 +276,8 @@ class AdvancedAnalysisService:
             # Ini akan menghemat RAM server secara drastis!
             anomalies = anomalies[:1500]
             
-            # Save to Cache
-            _MEMORY_CACHE[cache_key] = {
-                'timestamp': current_time,
-                'data': anomalies
-            }
+            # Save to Disk Cache
+            save_cache_to_disk(cache_key, anomalies)
             
             # Pagination
             total_items = len(anomalies)
@@ -309,6 +313,11 @@ class AdvancedAnalysisService:
         Aggregates consumption by Gardu. 
         Returns Top N busiest Gardu.
         """
+        from services.analysis import load_cache, save_cache_to_disk
+        cache_key = f"gardu_l{limit}_u{unitup}"
+        cache = load_cache()
+        if cache_key in cache: return cache[cache_key]
+        
         # Sum of all months in 2025 per Gardu
         total_kwh_expr = (
             func.coalesce(Customer2025.jan_2025, 0) + func.coalesce(Customer2025.feb_2025, 0) +
@@ -366,7 +375,7 @@ class AdvancedAnalysisService:
         
         results_2024 = {row.gardu: float(row.total_kwh_2024 or 0) for row in query_2024.all()}
 
-        return [
+        final_result = [
             {
                 "gardu": row.gardu,
                 "customer_count": row.customer_count,
@@ -376,11 +385,18 @@ class AdvancedAnalysisService:
             }
             for row in results
         ]
+        save_cache_to_disk(cache_key, final_result)
+        return final_result
 
     def get_power_changes(self, unitup: int = None) -> Dict[str, Any]:
         """
         Compare 2024 and 2025 to find power upgrades/downgrades.
         """
+        from services.analysis import load_cache, save_cache_to_disk
+        cache_key = f"power_changes_u{unitup}"
+        cache = load_cache()
+        if cache_key in cache: return cache[cache_key]
+        
         sql = """
             SELECT 
                 c25.idpel, c25.nama, c24.daya as daya_2024, c25.daya as daya_2025
@@ -416,7 +432,7 @@ class AdvancedAnalysisService:
         upgrades.sort(key=lambda x: x['diff'], reverse=True)
         downgrades.sort(key=lambda x: abs(x['diff']), reverse=True)
         
-        return {
+        final_result = {
             "summary": {
                 "total_upgrades": len(upgrades),
                 "total_downgrades": len(downgrades),
@@ -426,9 +442,15 @@ class AdvancedAnalysisService:
             "upgrades": upgrades[:150], 
             "downgrades": downgrades[:150] 
         }
+        save_cache_to_disk(cache_key, final_result)
+        return final_result
 
     def get_daya_distribution(self, year: int = 2025, unitup: int = None):
         """Get distribution of customers and energy by Power Limit (Daya)"""
+        from services.analysis import load_cache, save_cache_to_disk
+        cache_key = f"daya_dist_y{year}_u{unitup}"
+        cache = load_cache()
+        if cache_key in cache: return cache[cache_key]
         
         Model = Customer2025 if year == 2025 else Customer2024
         
@@ -511,4 +533,5 @@ class AdvancedAnalysisService:
                 "growth_kwh": growth_kwh
             })
             
+        save_cache_to_disk(cache_key, distribution)
         return distribution
