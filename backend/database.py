@@ -14,7 +14,8 @@ engine = create_engine(
     pool_pre_ping=True,      # Check if connection is still alive
     pool_recycle=300,        # Recycle connections every 5 minutes
     pool_timeout=10,         # Don't wait forever if pool is exhausted (throw error)
-    max_overflow=10          # Allow 10 extra connections
+    max_overflow=10,         # Allow 10 extra connections
+    connect_args={"connect_timeout": 10} # Mencegah psycopg2 nge-hang selamanya kalau port 5432 diblokir (efek IPv6)
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
