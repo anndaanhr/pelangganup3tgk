@@ -1,0 +1,244 @@
+PERANCANGAN DAN IMPLEMENTASI BACKEND SISTEM MONITORING DAN ANALISIS DATA PELANGGAN PLN BERBASIS WEB PADA PLN UP3 TANJUNG KARANG
+(Laporan Kerja Praktik)
+Oleh
+Ananda Anhar Subing
+NPM 2317051082
+JURUSAN ILMU KOMPUTER
+FAKULTAS MATEMATIKA DAN ILMU PENGETAHUAN ALAM
+UNIVERSITAS LAMPUNG
+2026
+PERANCANGAN DAN IMPLEMENTASI BACKEND SISTEM MONITORING DAN ANALISIS DATA PELANGGAN PLN BERBASIS WEB PADA PLN UP3 TANJUNG KARANG
+Oleh
+Ananda Anhar Subing
+2317051082
+(Laporan Kerja Praktik)
+Sebagai Salah Satu Syarat Menyelesaikan Mata Kuliah
+KERJA PRAKTIK
+Pada
+Jurusan Ilmu Komputer
+Fakultas Matematika dan Ilmu Pengetahuan Alam
+Universitas Lampung
+JURUSAN ILMU KOMPUTER
+FAKULTAS MATEMATIKA DAN ILMU PENGETAHUAN ALAM
+UNIVERSITAS LAMPUNG
+2026
+DAFTAR ISI
+DAFTAR ISIi
+DAFTAR GAMBARii
+DAFTAR TABELiii
+I.PENDAHULUAN4
+1.1.Latar Belakang4
+1.2.Tujuan Kegiatan Kerja Praktik5
+1.3.Manfaat Kegiatan Kerja Praktik6
+1.3.1.Manfaat Bagi Mahasiswa6
+1.3.2.Manfaat Bagi Instansi7
+1.4.Lingkup Kerja Praktik7
+1.4.1.Lingkup Waktu7
+1.4.2.Lingkup Tempat8
+1.4.3.Lingkup Subtansi/Materi8
+II.LANDASAN TEORI10
+2.1.Gambaran Umum Instansi10
+2.1.1.Profil Instansi10
+2.1.2.Jenis Produk dan Jasa12
+2.1.3.Bagan Struktur Organisasi instansi13
+2.1.4.Deskripsi Pekerjaan14
+2.1.5.Produk yang Sudah Dihasilkan16
+2.2.Uraian Tentang Landasan Teori17
+III.RENCANA KEGIATAN20
+3.1.Deskripsi Kegiatan20
+3.2.Sumber Data23
+3.3.Metode Pengumpulan Data24
+3.4.Metode Penyelesaian Masalah26
+DAFTAR GAMBAR
+Gambar 1. Gedung PT PLN (Persero) UP3 Tanjung Karang9
+Gambar 2. Bagan Struktur Organisasi12
+Gambar 3. Tahapan-tahapan SDLC model Prototype25
+DAFTAR TABEL
+Tabel 1 Jadwal Kerja Praktik8
+PENDAHULUAN
+Latar Belakang
+Energi listrik merupakan salah satu kebutuhan utama dalam kehidupan masyarakat modern yang terus mengalami peningkatan seiring dengan pertumbuhan penduduk dan perkembangan teknologi. Kondisi ini menuntut perusahaan penyedia listrik untuk mampu memberikan pelayanan yang optimal serta didukung oleh sistem pengelolaan data yang efektif dan efisien (Priskilla et al., 2021).
+Sebagai perusahaan penyedia tenaga listrik nasional, PT PLN (Persero) memiliki tanggung jawab besar dalam mengelola data pelanggan serta penjualan energi listrik. Pada tingkat unit pelayanan seperti UP3, pengolahan data pelanggan masih banyak dilakukan menggunakan spreadsheet. Metode tersebut menimbulkan berbagai kendala, di antaranya proses pengolahan data yang memakan waktu, tingginya potensi kesalahan input, serta keterbatasan dalam melakukan analisis data secara cepat dan akurat.
+Selain itu, proses monitoring terhadap data pelanggan seperti pemakaian listrik, kondisi meter, serta anomali data masih belum terintegrasi secara optimal. Hal ini menyebabkan keterlambatan dalam pengambilan keputusan serta kurang efektifnya proses evaluasi kinerja penjualan energi listrik.
+Untuk mengatasi permasalahan tersebut, diperlukan suatu sistem yang mampu mengelola, memproses, dan menganalisis data pelanggan secara terpusat dan terstruktur. Dalam hal ini, pengembangan sistem berbasis web dengan dukungan backend yang kuat menjadi solusi yang relevan. Backend berperan dalam mengelola logika aplikasi, memproses data, melakukan validasi, serta menyediakan layanan melalui API yang dapat diakses oleh sistem frontend.
+Dengan adanya sistem backend yang terintegrasi, proses pengolahan data seperti validasi data pelanggan, analisis pemakaian listrik, serta monitoring kinerja penjualan dapat dilakukan secara lebih efisien, akurat, dan real-time. Hal ini diharapkan dapat mendukung peningkatan kualitas pelayanan serta pengambilan keputusan yang lebih tepat di lingkungan PT PLN (Persero), khususnya pada UP3 Tanjung Karang.
+Tujuan Kegiatan Kerja Praktik
+Adapun tujuan dari Kerja Praktik ini adalah:
+Mempelajari sistem pengolahan dan manajemen data penjualan tenaga listrik di PT PLN (Persero) UP3 Tanjung Karang.
+Mengembangkan sistem backend berbasis Python yang mampu mengelola data pelanggan dalam jumlah besar secara terstruktur dan efisien.
+Mengimplementasikan proses pengolahan data menggunakan metode ETL (Extract, Transform, Load) untuk mengintegrasikan data pelanggan tahun 2024 dan 2025.
+Membangun layanan backend (API) yang dapat menyediakan data secara real-time untuk kebutuhan visualisasi dashboard monitoring.
+Menghasilkan sistem yang mampu melakukan analisis perbandingan data pelanggan antar tahun (2024–2025) untuk mengetahui tren dan perubahan pelanggan.
+Mendukung pengembangan sistem monitoring berbasis web yang dapat membantu pihak manajemen dalam pengambilan keputusan berbasis data.
+Manfaat Kegiatan Kerja Praktik
+Manfaat yang diharapkan dari pelaksanaan kegiatan Kerja Praktik ini adalah sebagai berikut:
+Manfaat Bagi Mahasiswa
+Mengimplementasikan konsep pemrograman backend, pengolahan data, serta manajemen basis data yang telah dipelajari selama perkuliahan.
+Memperoleh pengalaman langsung dalam mengembangkan sistem backend berbasis Python untuk pengolahan data skala besar.
+Meningkatkan kemampuan analisis data, khususnya dalam mengolah dan membandingkan data pelanggan PLN tahun 2024 dan 2025.
+Melatih kemampuan dalam merancang dan membangun API sebagai penghubung antara sistem backend dan frontend.
+Mengembangkan kemampuan problem solving dalam menangani permasalahan nyata terkait integrasi, transformasi, dan optimasi data.
+Manfaat Bagi Instansi
+Membantu menyediakan sistem backend yang mampu mengelola data pelanggan secara terstruktur, efisien, dan terintegrasi.
+Mendukung proses monitoring dan analisis data pelanggan melalui penyediaan data yang siap digunakan oleh sistem frontend (dashboard).
+Mempercepat proses pengolahan data pelanggan dibandingkan metode manual berbasis spreadsheet.
+Mengurangi risiko kesalahan dalam pengolahan dan perbandingan data pelanggan antar tahun.
+Memberikan kontribusi dalam pengembangan sistem digital yang mendukung transformasi PLN menuju pengelolaan data berbasis teknologi.
+Lingkup Kerja Praktik
+Berikut ini lingkup kegiatan Kerja Praktik yang disusun untuk memberikan batasan yang jelas terhadap pelaksanaan kegiatan, yang meliputi lingkup waktu, lingkup tempat, serta lingkup materi dan substansi:
+Lingkup Waktu
+Kegiatan Kerja Praktik dilaksanakan selama 40 hari, terhitung mulai tanggal 15 Desember 2025 sampai dengan 06 Februari 2026. Waktu kerja dilaksanakan setiap hari Senin s.d. Jumat dengan detail seperti pada tabel 1 berikut:
+Tabel 1 Jadwal Kerja Praktik
+Hari
+Jam Masuk
+Jam Istirahat
+Jam Pulang
+Senin – Kamis
+07.30 
+12.00 – 12.30
+16.00
+Jumat
+07.00
+11.30 – 13.00
+16.30
+Sabtu – Minggu
+Libur
+Lingkup Tempat
+Tempat pelaksanaan Kerja Praktik berlokasi di PT PLN (Persero) UP3 Tanjung Karang, yang beralamat di Jl. Diponegoro No.14, Gotong Royong, Kec. Tj. Karang Pusat, Kota Bandar Lampung, Lampung 35119.
+Lingkup Subtansi/Materi
+Validasi Data Merk kWh Meter (Program 17171):    Kegiatan ini mencakup proses verifikasi dan validasi kesesuaian merk serta spesifikasi teknis kWh meter yang terpasang di pelanggan dengan data yang tercatat pada sistem. Tujuannya adalah untuk memastikan akurasi pencatatan konsumsi energi listrik serta meminimalisir potensi kehilangan pendapatan.
+Monitoring Pemakaian Listrik Statis: Kegiatan ini meliputi pemantauan pola konsumsi listrik pelanggan pascabayar yang menunjukkan tren pemakaian statis. Proses ini dilakukan untuk mengidentifikasi kemungkinan gangguan pada alat ukur atau indikasi anomali yang dapat memengaruhi data penjualan energi listrik.
+Pengolahan Data DPM dan OLAP: Kegiatan ini melibatkan rekapitulasi dan analisis data dari Daftar Piutang Pelanggan (DPM) serta data On-Line Analytical Processing (OLAP) yang berasal dari berbagai Unit Layanan Pelanggan (ULP). Data tersebut digunakan sebagai dasar dalam pemantauan kinerja penjualan serta efektivitas proses penagihan.
+Pengolahan DIL: Kegiatan ini mencakup pengolahan Data Induk Langganan (DIL) sebagai sumber utama informasi pelanggan yang digunakan dalam proses integrasi data serta kebutuhan analisis sistem.
+Kegiatan Revisit Pelanggan: Melakukan kunjungan lapangan kepada pelanggan yang mengalami pemutusan sementara untuk melakukan verifikasi status, edukasi, serta pengambilan data keputusan pelanggan terkait keberlanjutan penggunaan layanan PLN.
+Validasi Data SWACAM: Kegiatan ini mencakup validasi terhadap data hasil pencatatan meter mandiri oleh pelanggan guna memastikan keakuratan data yang masuk ke dalam sistem serta mengurangi potensi kesalahan pencatatan.
+Validasi Data GANMET Stand tidak bergerak: Kegiatan ini meliputi pengecekan terhadap data penggantian meter, khususnya pada kondisi stand meter yang tidak mengalami perubahan, untuk memastikan tidak adanya kesalahan pencatatan serta mendeteksi kemungkinan permasalahan pada alat ukur.
+LANDASAN TEORI
+Gambaran Umum Instansi
+Bagian ini menyajikan gambaran umum mengenai instansi tempat dilaksanakannya Kerja Praktik, yaitu PT PLN (Persero) UP3 Tanjung Karang. Gambaran ini mencakup profil instansi, sejarah singkat, visi, misi, motto serta jenis produk dan jasa yang ditawarkan..
+Profil Instansi
+Gambar 1. Gedung PT PLN (Persero) UP3 Tanjung Karang
+PT PLN (Persero) UP3 Tanjung Karang adalah salah satu unit operasional yang berada di bawah naungan PT PLN (Persero) Unit Induk Distribusi (UID) Lampung. Unit ini memiliki tugas utama dalam menyalurkan energi listrik serta memberikan layanan kepada pelanggan di wilayah Kota Bandar Lampung dan daerah sekitarnya. Kantornya terletak di lokasi yang strategis, yaitu di Jalan Pangeran Diponegoro No. 14, Bandar Lampung.
+Sejarah Singkat
+Sejarah perkembangan ketenagalistrikan di Indonesia bermula pada akhir abad ke-19, ketika perusahaan-perusahaan Belanda yang bergerak di sektor perkebunan seperti gula dan teh mulai membangun pembangkit listrik untuk kebutuhan operasional mereka sendiri. Pada masa pendudukan Jepang tahun 1942–1945, pengelolaan listrik berada di bawah kendali pemerintah Jepang. Setelah Indonesia merdeka, tepatnya pada Agustus 1945, para pemuda Indonesia mengambil alih fasilitas kelistrikan tersebut dan menyerahkannya kepada pemerintah Republik Indonesia.
+Perkembangan kelembagaan kelistrikan di Indonesia selanjutnya mengalami beberapa perubahan, yaitu:
+27 Oktober 1945: Dibentuknya Jawatan Listrik dan Gas oleh Presiden Soekarno.
+1961: Perubahan menjadi BPU-PLN (Badan Pimpinan Umum Perusahaan Listrik Negara).
+1972: Ditetapkan sebagai Perusahaan Umum Listrik Negara (Perum PLN).
+1994: Status diubah menjadi Perusahaan Perseroan (Persero) dan berlaku hingga saat ini.
+Visi
+Menjadi Perusahaan Global Top 500 dan #1 Pilihan Pelanggan untuk Solusi Energi.
+Misi
+Menjalankan bisnis kelistrikan dan bidang terkait yang berorientasi pada kepuasan pelanggan, anggota perusahaan, dan pemegang saham.
+Menjadikan tenaga listrik sebagai media untuk meningkatkan kualitas kehidupan masyarakat.
+Mengupayakan agar tenaga listrik menjadi pendorong kegiatan ekonomi.
+Menjalankan kegiatan usaha yang berwawasan lingkungan.
+Jenis Produk dan Jasa
+PT PLN (Persero) menyediakan berbagai produk dan jasa terkait ketenagalistrikan guna memenuhi kebutuhan pelanggan yang beragam, antara lain:
+Layanan penyambungan daya listrik baru maupun perubahan daya, baik untuk kategori pascabayar maupun prabayar (Listrik Pintar);
+Layanan SPKLU (Stasiun Pengisian Kendaraan Listrik Umum), yaitu infrastruktur pengisian daya untuk kendaraan bermotor listrik berbasis baterai (KBLBB) sebagai wujud dukungan terhadap ekosistem kendaraan listrik di Indonesia;
+Aplikasi PLN Mobile, sebuah Platform digital yang menyediakan layanan mandiri bagi pelanggan untuk melaporkan gangguan, mengecek tagihan, melakukan permohonan pasang baru, hingga memantau status penanganan secara real-time;
+Layanan Penyediaan pasokan listrik dengan keandalan tinggi dan tarif khusus bagi sektor industri serta bisnis berskala besar;
+Solusi Energi Terpadu meliputi berbagai jasa pendukung kelistrikan melalui anak perusahaan untuk meningkatkan efisiensi penggunaan energi oleh pelanggan;
+Bagan Struktur Organisasi instansi
+Gambar 2. Bagan Struktur Organisasi
+Pada bagan struktur organisasi Unit Pelaksana Pelayanan Pelanggan (UP3) Tanjung Karang, tingkat tertinggi dipimpin oleh kepala unit sebagai penanggung jawab utama. Di bawahnya terdapat beberapa bagian yang membawahi fungsi-fungsi utama, seperti perencanaan, jaringan dan konstruksi, transaksi energi listrik, niaga dan pemasaran, pembangkitan, serta keuangan dan umum. Setiap bagian memiliki beberapa seksi yang bertugas menjalankan kegiatan operasional sesuai bidangnya. Selain itu, terdapat juga unit pendukung yang menangani pengadaan serta keselamatan dan keamanan kerja. Pada tingkat paling bawah terdapat unit layanan yang berperan dalam memberikan pelayanan langsung kepada pelanggan. Pada bagan struktur organisasi Unit Pelaksana Pelayanan Pelanggan (UP3) Tanjung Karang, tingkat tertinggi dipimpin oleh kepala unit sebagai penanggung jawab utama. Di bawahnya terdapat beberapa bagian yang membawahi fungsi-fungsi utama, seperti perencanaan, jaringan dan konstruksi, transaksi energi listrik, niaga dan pemasaran, pembangkitan, serta keuangan dan umum. Setiap bagian memiliki beberapa seksi yang bertugas menjalankan kegiatan operasional sesuai bidangnya. Selain itu, terdapat juga unit pendukung yang menangani pengadaan serta keselamatan dan keamanan kerja. Pada tingkat paling bawah terdapat unit layanan yang berperan dalam memberikan pelayanan langsung kepada pelanggan.
+Deskripsi Pekerjaan 
+Struktur organisasi pada PT PLN (Persero) UP3 Tanjung Karang terdiri dari berbagai bagian dan seksi yang memiliki fungsi spesifik dan saling terintegrasi dalam mendukung pelayanan ketenagalistrikan. Adapun uraian tanggung jawab dan tugas pokok dari masing-masing unit kerja tersebut adalah sebagai berikut:
+Manager Unit Pelaksana Pelayanan Pelanggan (MUP3): Manager Unit Pelaksana Pelayanan Pelanggan bertanggung jawab penuh dalam memimpin pelaksanaan pelayanan kelistrikan kepada pelanggan, mengoordinasikan seluruh kegiatan operasional, serta melakukan pengawasan terhadap seluruh unit kerja di bawahnya demi memastikan distribusi listrik berjalan sesuai regulasi.
+Bagian Perencanaan: Berfokus pada penyusunan rencana sistem dan pengelolaan data pendukung operasional. Tugas utamanya mencakup perencanaan sistem pelayanan serta pemetaan data jaringan dan pelanggan untuk mendukung akurasi pengambilan keputusan manajerial.
+Bagian Jaringan dan Konstruksi: Mengelola operasional teknis yang meliputi pemeliharaan dan pembangunan infrastruktur jaringan distribusi listrik. Bagian ini juga bertanggung jawab atas ketersediaan logistik teknis guna menjaga keandalan dan standar keselamatan penyaluran energi.
+Bagian Transaksi Energi Listrik: Menyelenggarakan administrasi dan pengelolaan transaksi energi, melakukan pengendalian angka susut (losses), serta memvalidasi keakuratan alat ukur transaksi (meteran) untuk efisiensi penyaluran listrik.
+Bagian Niaga dan Pemasaran: Bertugas mengelola aspek komersial yang meliputi strategi pemasaran layanan, pengelolaan hubungan pelanggan, serta peningkatan target penjualan untuk mencapai tingkat kepuasan pelanggan yang optimal.
+Bagian Pembangkitan: Melaksanakan fungsi operasional pembangkitan energi listrik sesuai dengan wilayah kerja dan penugasan khusus unit untuk mendukung ketersediaan daya lokal.
+Bagian Keuangan dan Umum: Menangani aspek manajerial internal yang meliputi pengelolaan akuntansi, administrasi keuangan, tata usaha, serta penyediaan dukungan umum demi kelancaran aktivitas perkantoran dan operasional.
+Seksi Pelaksana Pengadaan: Bertanggung jawab atas proses pengadaan barang dan jasa perusahaan dengan memastikan seluruh prosedur berjalan sesuai dengan ketentuan yang berlaku guna mendukung kebutuhan teknis maupun pelayanan.
+Seksi Keselamatan, Kesehatan Kerja, Keamanan, dan Lingkungan (K3L): Menjamin terciptanya lingkungan kerja yang aman melalui penerapan standar keselamatan kerja, perlindungan lingkungan hidup, serta sistem pengamanan aset dan personel perusahaan.
+Unit Pelayanan Pelanggan (ULP): Berperan sebagai garda terdepan yang melaksanakan pelayanan pelanggan secara langsung di wilayah kerja spesifik dan menjadi representasi UP3 dalam merespons kebutuhan masyarakat secara cepat.
+Produk yang Sudah Dihasilkan
+Sebagai unit yang berfokus pada proses bisnis distribusi dan pelayanan pelanggan, PT PLN (Persero) UP3 Tanjung Karang menyediakan berbagai produk layanan yang ditujukan untuk memenuhi kebutuhan energi listrik masyarakat di wilayah Lampung. Adapun produk-produk layanan pelanggan tersebut meliputi:
+Tenaga Listrik (Pascabayar dan Prabayar):  Produk utama berupa penyediaan tenaga listrik bagi kepentingan umum dalam jumlah dan mutu yang memadai. Layanan ini mencakup kategori prabayar (Listrik Pintar) dan pascabayar untuk berbagai segmen tarif dan layanan.
+Aplikasi PLN Mobile: Platform layanan mandiri yang disediakan untuk memudahkan pelanggan dalam melaporkan gangguan secara real-time, melakukan pengecekan tagihan, hingga pengajuan permohonan pasang baru.
+Stasiun Pengisian Kendaraan Listrik Umum (SPKLU): Infrastruktur pengisian daya baterai kendaraan listrik yang disediakan untuk mendukung ekosistem kendaraan listrik (KBLBB) sesuai dengan pilar transformasi Green dan Innovative.
+Layanan Call Center 123: Produk layanan pengaduan dan informasi yang tersedia 24 jam bagi pelanggan, baik melalui telepon (0721-123) maupun kanal digital lainnya.
+Uraian Tentang Landasan Teori
+Sebagai unit yang berfokus pada proses bisnis distribusi dan pelayanan pelanggan, PT PLN (Persero) UP3 Tanjung Karang menyediakan berbagai produk layanan yang ditujukan untuk memenuhi kebutuhan energi listrik masyarakat di wilayah Lampung. Adapun produk-produk layanan pelanggan tersebut meliputi.
+Sistem Informasi
+Sistem informasi merupakan sekumpulan komponen yang saling berinteraksi untuk mengumpulkan, mengolah, menyimpan, dan menyajikan informasi guna mendukung kegiatan operasional dan pengambilan keputusan dalam suatu organisasi.
+Sistem Informasi Berbasis Web
+Sistem informasi berbasis web adalah sistem informasi yang memanfaatkan teknologi web sebagai media penyampaian informasi, sehingga dapat diakses melalui peramban tanpa instalasi khusus di sisi pengguna.
+Arsitektur Client-Server
+Arsitektur client–server merupakan model sistem terdistribusi yang memisahkan peran antara client sebagai pengguna layanan dan server sebagai penyedia layanan. Arsitektur ini memungkinkan pengelolaan sistem yang lebih terstruktur dan mudah dikembangkan.
+RESTful API
+RESTful API adalah pendekatan dalam pengembangan layanan web yang menggunakan protokol HTTP dan metode standar seperti GET dan POST untuk pertukaran data antara client dan server dengan format JSON.
+Backend System
+Backend system merupakan bagian sistem yang menangani logika bisnis, pengolahan data, dan interaksi dengan basis data. Backend berperan penting dalam memastikan data diproses secara benar sebelum disajikan kepada pengguna.
+Bahasa Pemrograman Python
+Python adalah bahasa pemrograman tingkat tinggi yang banyak digunakan dalam pengembangan backend dan pengolahan data karena sintaksnya yang sederhana dan dukungan pustaka yang luas.
+FastAPI
+FastAPI adalah framework web berbasis Python yang digunakan untuk membangun RESTful API dengan performa tinggi serta dokumentasi API otomatis.
+Basis Data PostgreSQL
+PostgreSQL merupakan sistem manajemen basis data relasional yang digunakan untuk menyimpan data pelanggan secara terstruktur dan mendukung proses query yang kompleks.
+SQLAlchemy
+SQLAlchemy adalah Object Relational Mapping (ORM) yang digunakan untuk mempermudah interaksi antara aplikasi Python dengan basis data PostgreSQL.
+Pandas dan OpenPyXL
+Pandas digunakan untuk pengolahan dan analisis data dalam jumlah besar, sedangkan OpenPyXL digunakan untuk membaca data pelanggan dari file Excel dalam proses import data.
+Visualisasi Data
+Visualisasi data merupakan teknik penyajian data dalam bentuk grafik atau diagram untuk mempermudah analisis tren dan perbandingan data pelanggan.
+Analisis Proses Bisnis yang Berjalan
+Sistem pengelolaan data pelanggan di PLN UP3 Tanjung Karang sebelumnya masih banyak bergantung pada pengolahan data menggunakan file spreadsheet. Proses analisis dan perbandingan data pelanggan antar tahun dilakukan secara manual, sehingga memerlukan waktu yang lama dan berpotensi menimbulkan kesalahan. Oleh karena itu, diperlukan sistem backend berbasis web yang mampu melakukan pengolahan, analisis, dan penyajian data pelanggan secara otomatis dan terintegrasi.
+RENCANA KEGIATAN
+Deskripsi Kegiatan
+Dalam pelaksanaan kerja praktik di PLN UP3 Tanjung Karang yang berlangsung pada 15 Desember 2025 hingga 6 Februari 2026, penulis terlibat dalam pengembangan proyek “Perancangan dan Implementasi Backend Sistem Monitoring dan Analisis Data Pelanggan PLN Berbasis Web”. Kegiatan ini berfokus pada pembuatan aplikasi backend (server-side) yang bertugas mengelola data pelanggan listrik PLN, khususnya data tahun 2024 dan 2025, serta menyediakan antarmuka layanan (service interface) berupa RESTful API untuk mendukung kebutuhan analisis data pelanggan.
+Selama periode kerja praktik, penulis bertanggung jawab merancang arsitektur sistem, mengimplementasikan kode program, dan melakukan pengujian terhadap fungsionalitas backend tersebut. Sejumlah fitur utama dikembangkan sesuai kebutuhan PLN UP3 Tanjung Karang, antara lain: mekanisme impor data pelanggan dari file Excel, proses klasifikasi pelanggan berdasarkan statusnya (misalnya apakah pelanggan tersebut aktif – tetap berlangganan, baru – mulai berlangganan pada 2025, atau hilang – berhenti berlangganan setelah 2024), fungsi analisis perbandingan jumlah pelanggan dan konsumsi listrik antara tahun 2024 dan 2025, serta penyajian informasi tren pemakaian listrik bulanan. Melalui fitur-fitur ini, sistem yang dibangun diharapkan dapat memberikan wawasan mengenai, misalnya, berapa banyak penambahan pelanggan baru dan kehilangan pelanggan pada tahun 2025 dibanding 2024, serta bagaimana pola konsumsi listrik pelanggan dari bulan ke bulan.
+Teknologi yang digunakan dalam pengembangan backend ini meliputi bahasa pemrograman Python dengan kerangka kerja FastAPI untuk membangun layanan web, serta sistem manajemen basis data PostgreSQL untuk penyimpanan data. FastAPI dipilih karena kerangka kerja ini dikenal menghasilkan performa yang sangat tinggi dan mendukung pemrograman asinkron, sehingga mampu menangani banyak permintaan secara efisien. Selain itu, FastAPI memiliki fitur dokumentasi otomatis (Swagger UI) yang memudahkan penulis dan tim dalam melakukan uji coba serta integrasi API selama proses pengembangan. Sementara itu, PostgreSQL digunakan sebagai basis data karena reputasinya yang andal dalam menjaga konsistensi dan integritas data pada skala besar. Seluruh layanan backend dirancang mengikuti prinsip arsitektur RESTful dengan format pertukaran data JSON yang bersifat lintas platform, sehingga frontend (yang menggunakan kerangka Next.js) dapat mengonsumsi data dari backend secara mudah melalui jaringan intranet maupun internet.
+Selama menjalankan proyek ini, penulis ditempatkan di lingkungan kerja PLN UP3 Tanjung Karang yang memberikan kesempatan untuk berkoordinasi langsung dengan pegawai dan pihak terkait. Kegiatan penulis sehari-hari meliputi diskusi rutin dengan pembimbing lapangan mengenai rancangan sistem serta pelaporan perkembangan implementasi. Diskusi tersebut mencakup demonstrasi alur pengolahan data melalui API yang dibangun, serta evaluasi bersama atas hasil sementara yang telah dicapai. Melalui interaksi intensif ini, penulis memastikan bahwa pengembangan sistem berjalan sesuai dengan kebutuhan nyata di lapangan. Apabila ditemukan kendala atau perbedaan pemahaman, penulis dapat segera melakukan penyesuaian berkat masukan dari pihak PLN. Pada akhir masa kerja praktik, backend sistem diharapkan telah selesai diimplementasikan dan dapat terintegrasi dengan frontend, sehingga PLN UP3 Tanjung Karang memiliki alat baru untuk memonitor dan menganalisis data pelanggan secara lebih efektif dan efisien dalam jangka panjang.
+Rincian kegiatan yang dilakukan meliputi:
+Pemahaman Proses Bisnis
+Mempelajari alur pengelolaan data pelanggan dan penjualan tenaga listrik di PT PLN (Persero) UP3 Tanjung Karang, mulai dari proses pencatatan data pelanggan, pengolahan data, hingga penyajian laporan sebagai dasar pengambilan keputusan.
+Operasional Lapangan dan Administratif
+Meliputi: 
+Melakukan validasi data teknis kWh meter melalui Program 17171 untuk memastikan akurasi alat ukur
+Melakukan monitoring terhadap pelanggan pascabayar dengan pemakaian statis guna mendeteksi anomali
+Merekapitulasi data Daftar Piutang Pelanggan (DPM) dan data On-Line Analytical Processing (OLAP) dari berbagai Unit Layanan Pelanggan (ULP).
+Pengembangan Sistem BAckend
+Pada tahap pengembangan, penulis merancang dan mengimplementasikan sistem backend berbasis Python sebagai inti dari sistem monitoring data pelanggan. Pengembangan dilakukan dengan menerapkan proses ETL (Extract, Transform, Load) untuk mengolah data dari file Excel ke dalam basis data yang terstruktur. Selain itu, penulis juga merancang basis data yang mampu menangani data dalam jumlah besar serta mengembangkan API yang berfungsi untuk menyediakan data kepada sistem frontend. Sistem backend ini dirancang agar mampu memproses data secara efisien, akurat, dan mendukung kebutuhan analisis serta visualisasi data.
+Sumber Data
+Dalam penyusunan laporan dan pengembangan sistem ini, data dikumpulkan dari dua sumber utama sesuai dengan klasifikasi penelitian sistem informasi menurut (Hayati & Yeni Mutiawati, 2023).:
+Data Primer: Data primer adalah data yang diperoleh penulis secara langsung dari sumber pertama di lapangan tanpa perantara. Dalam konteks kerja praktik ini, data primer mencakup informasi dan data yang didapat melalui interaksi langsung dengan lingkungan PLN UP3 Tanjung Karang. Penulis melakukan pengamatan (observasi) dan wawancara dengan pembimbing lapangan maupun staf terkait untuk memahami proses pengelolaan data pelanggan yang berjalan saat ini serta menggali kebutuhan sistem yang diharapkan. Selain informasi kualitatif tersebut, data primer juga berupa data kuantitatif mentah pelanggan PLN tahun 2024 dan 2025 yang diperoleh langsung dari pihak PLN (misalnya dalam bentuk file Excel). Data pelanggan mentah ini menjadi basis utama untuk dianalisis dan diolah oleh sistem yang dikembangkan, serta digunakan sebagai bahan uji coba fitur-fitur backend selama proses pengembangan.
+Data Sekunder: Data sekunder adalah data yang diperoleh tidak secara langsung dari objek penelitian, melainkan melalui pihak ketiga atau sumber yang sudah ada. Sumber data sekunder dalam proyek ini meliputi berbagai literatur dan referensi teoritis yang relevan untuk mendukung perancangan dan implementasi sistem. Penulis memanfaatkan bahan pustaka seperti buku, jurnal ilmiah, laporan penelitian, dan artikel daring yang membahas topik-topik terkait, antara lain: konsep sistem informasi monitoring data pelanggan, arsitektur RESTful API, panduan penggunaan framework FastAPI, serta metode analisis data pelanggan (misalnya teknik perbandingan data tahun jamak dan analisis tren penggunaan listrik). Sebagai contoh, penulis mengkaji penelitian terdahulu mengenai pengelompokan pelanggan listrik PLN menggunakan teknik data mining untuk mendapatkan wawasan tentang pentingnya memahami karakteristik pelanggan dalam mengembangkan strategi pelayanan yang efektif. Selain itu, dokumentasi resmi dan forum komunitas daring terkait teknologi FastAPI serta PostgreSQL juga dijadikan referensi teknis untuk menyelesaikan berbagai kendala selama pengembangan. Pemanfaatan data sekunder ini bertujuan memperkaya landasan teori dan metodologi, sehingga solusi backend yang dibangun memiliki justifikasi akademis serta sejalan dengan praktik terbaik (best practices) yang telah ada.
+Metode Pengumpulan Data
+Metode pengumpulan data yang diterapkan penulis disesuaikan dengan kebutuhan untuk memahami kondisi aktual di lapangan sekaligus memperoleh landasan teoritis yang kuat. Adapun metode-metode pengumpulan data yang dilakukan penulis adalah sebagai berikut:
+Wawancara dan diskusi
+Penulis mengadakan wawancara dengan pembimbing lapangan dan sejumlah staf PLN yang terlibat dalam pengelolaan data pelanggan. Tujuan wawancara adalah untuk memperoleh informasi secara mendalam dan detail mengenai kebutuhan pengguna (user requirements) serta kendala-kendala yang dihadapi dalam monitoring data pelanggan. Melalui sesi tanya jawab ini, penulis mendapatkan klarifikasi mengenai definisi klasifikasi pelanggan (kriteria pelanggan aktif, baru, maupun hilang) dan harapan pihak PLN terhadap fitur-fitur analisis yang akan dibangun. Wawancara merupakan salah satu teknik pengumpulan data yang efektif karena memungkinkan penulis menggali pengalaman dan pandangan responden secara langsung, sehingga informasi yang diperoleh lebih personal dan kontekstual. Data dan insight hasil wawancara kemudian dirangkum dan dijadikan acuan utama dalam menyusun spesifikasi dan rancangan sistem.Observasi
+Penulis melakukan pengamatan langsung di kantor PT PLN UP3 Tanjung Karang untuk memahami bagaimana staf mengolah data penjualan secara manual. Metode ini bertujuan untuk mengidentifikasi letak inefisiensi dan potensi human error pada proses bisnis yang sedang berjalan.
+Observasi
+Metode observasi atau pengamatan langsung digunakan untuk mendapatkan gambaran nyata mengenai proses dan sistem yang berjalan di PLN UP3 Tanjung Karang terkait pengelolaan data pelanggan. Penulis melakukan observasi terhadap aktivitas pengolahan data pelanggan (misalnya prosedur pencatatan, pelaporan, dan penyimpanan data) yang selama ini dilakukan secara konvensional menggunakan aplikasi spreadsheet. Melalui observasi ini, penulis dapat mengidentifikasi permasalahan di alur kerja eksisting, seperti potensi duplikasi pencatatan, kesulitan dalam membandingkan data pelanggan antar tahun, serta lamanya waktu yang dibutuhkan untuk menyusun laporan manual. Hasil pengamatan tersebut menjadi masukan berharga dalam perancangan sistem backend yang diharapkan dapat mengatasi kelemahan-kelemahan proses manual tadi. Dengan kata lain, observasi membantu penulis memastikan bahwa solusi yang dikembangkan akan relevan dan sesuai dengan kebutuhan nyata di lapangan.
+Studi Literatur
+Selain observasi dan wawancara, penulis juga melakukan studi literatur sebagai pelengkap dalam pengumpulan data. Metode studi pustaka ini dilakukan dengan menelusuri dan mempelajari berbagai sumber tertulis yang relevan dengan topik proyek. Penulis membaca buku teks, artikel ilmiah, prosiding konferensi, serta dokumentasi teknis yang berkaitan dengan sistem informasi, pengembangan web, dan analisis data. Fokus studi literatur di antaranya pada konsep teoritis RESTful API, praktik terbaik pembangunan backend dengan Python, teknik pengolahan data pelanggan (termasuk metode perbandingan dataset tahun berbeda), dan contoh implementasi sistem serupa di sektor utilitas. Informasi yang diperoleh dari literatur tersebut memperkaya pemahaman penulis terhadap permasalahan dan solusi yang ada, serta menjadi pembanding untuk memvalidasi pendekatan yang dipilih. Dengan melakukan studi literatur, penulis memastikan bahwa pengembangan sistem didasarkan pada prinsip-prinsip ilmiah dan mengikuti perkembangan teknologi terkini, sehingga metode penyelesaian masalah yang diterapkan lebih kredibel dan teruji.
+Metode Penyelesaian Masalah
+Tahap awal yang dilakukan dalam kegiatan ini adalah analisis kebutuhan serta identifikasi permasalahan. Pada tahap ini, penulis menelaah kondisi awal di PLN UP3 Tanjung Karang, yaitu belum tersedianya sistem yang terintegrasi untuk memonitor data pelanggan secara real-time. Proses pelaporan dan analisis yang masih dilakukan secara manual menggunakan Microsoft Excel menyebabkan pekerjaan menjadi kurang efisien, memakan waktu yang cukup lama, serta memiliki risiko kesalahan manusia (human error) yang tinggi. Permasalahan tersebut kemudian dikonfirmasi melalui diskusi bersama pembimbing lapangan, sehingga diperoleh pemahaman yang lebih jelas mengenai kebutuhan sistem yang akan dikembangkan. Berdasarkan hasil analisis, dirumuskan kebutuhan fungsional sistem yang meliputi kemampuan untuk mengimpor data pelanggan dari file Excel ke dalam database secara akurat, kemampuan untuk mengidentifikasi perubahan status pelanggan antar tahun, serta kemampuan untuk menyajikan hasil analisis dalam bentuk informasi yang mudah dipahami oleh pengguna. Selain itu, aspek keamanan dan kerahasiaan data juga menjadi perhatian utama mengingat data pelanggan bersifat sensitif. Hasil dari tahap ini berupa spesifikasi awal sistem backend, termasuk daftar fitur yang akan dikembangkan, rancangan endpoint API, serta desain awal skema basis data.
+Selanjutnya, tahap perancangan dan implementasi sistem backend dilakukan dengan merancang arsitektur sistem secara menyeluruh, yang mencakup desain basis data serta struktur API. Basis data dirancang menggunakan PostgreSQL dengan pendekatan relasional untuk menyimpan data pelanggan beserta informasi pemakaian listrik secara terstruktur. Skema database disusun sedemikian rupa agar dapat mengakomodasi data dari tahun 2024 dan 2025, sehingga memudahkan proses analisis perbandingan antar tahun. Selain itu, dirancang pula berbagai endpoint API yang mendukung kebutuhan sistem, seperti endpoint untuk mengunggah data pelanggan melalui file Excel, endpoint untuk mengambil informasi status pelanggan, serta endpoint untuk memperoleh ringkasan tren konsumsi listrik bulanan.
+Implementasi sistem backend kemudian dilakukan menggunakan bahasa pemrograman Python dengan framework FastAPI yang dipilih karena memiliki performa tinggi serta mendukung pengolahan request secara efisien. Dalam proses pengembangan, digunakan berbagai pustaka pendukung seperti Pydantic untuk validasi data dan SQLAlchemy sebagai ORM untuk mempermudah interaksi dengan database PostgreSQL. Pengembangan fitur dilakukan secara bertahap, dimulai dari fitur impor data Excel dengan memanfaatkan library seperti pandas atau openpyxl untuk membaca dan memproses data. Pada tahap ini juga diterapkan proses pembersihan data (data cleaning) guna memastikan data yang disimpan memiliki kualitas yang baik. Selanjutnya, dikembangkan logika untuk mengklasifikasikan pelanggan menjadi kategori aktif, baru, dan hilang berdasarkan perbandingan data antar tahun. Selain itu, sistem juga dikembangkan untuk melakukan analisis tren konsumsi listrik bulanan yang dapat memberikan gambaran pola penggunaan listrik pelanggan. Seluruh hasil pengolahan data kemudian disajikan dalam format JSON melalui API berbasis RESTful agar dapat dengan mudah diintegrasikan dengan frontend.
+Setelah tahap implementasi, dilakukan pengujian dan validasi sistem untuk memastikan seluruh fungsi berjalan dengan baik. Pengujian mencakup proses impor data, klasifikasi pelanggan, serta pengujian setiap endpoint API secara langsung melalui sistem yang telah dibangun. Hasil pengujian kemudian dibandingkan dengan perhitungan manual guna memastikan keakuratan sistem. Selain itu, dilakukan juga uji penerimaan pengguna bersama pembimbing lapangan dan pihak PLN menggunakan data nyata. Masukan yang diperoleh dari proses tersebut digunakan sebagai dasar dalam melakukan penyempurnaan sistem.
+Tahap akhir dari kegiatan ini adalah implementasi sistem ke lingkungan operasional serta proses serah terima kepada pihak PLN. Sistem backend yang telah dikembangkan di-deploy ke server yang digunakan oleh PLN UP3 Tanjung Karang dengan melakukan konfigurasi yang diperlukan, termasuk pengaturan database, server aplikasi, serta aspek keamanan sistem. Setelah sistem berjalan dengan baik, dilakukan integrasi dengan frontend berbasis Next.js untuk memastikan alur kerja sistem berjalan secara end-to-end. Penulis juga menyusun dokumentasi teknis berupa API documentation yang berisi informasi mengenai endpoint, struktur data, serta cara penggunaan sistem. Proses ditutup dengan kegiatan sosialisasi dan demonstrasi sistem kepada pihak PLN, sehingga pengguna dapat memahami cara kerja dan pemanfaatan sistem secara langsung. Dengan selesainya seluruh tahapan tersebut, sistem backend yang dikembangkan diharapkan dapat membantu meningkatkan efisiensi dalam pengelolaan dan analisis data pelanggan serta mendukung pengambilan keputusan berbasis data di PLN UP3 Tanjung Karang.
+DAFTAR PUSTAKA
+Ardian, R., Saputra, D., & Pratama, A. (2025). Analisis dan Implementasi Sistem Monitoring Data Pelanggan Berbasis Web. Jurnal Teknologi Informasi dan Sistem, 6(1), 45–53.
+Creswell, J. W., & Creswell, J. D. (2018). Research Design: Qualitative, Quantitative, and Mixed Methods Approaches (5th ed.). SAGE Publications.
+FastAPI. (2026). FastAPI Documentation. https://fastapi.tiangolo.com/
+Fielding, R. T. (2000). Architectural styles and the design of network-based software architectures (Doctoral dissertation, University of California, Irvine). https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm
+Hassan, M. (2024). Primary Data – Types, Methods and Examples. Research Method. https://researchmethod.net/primary-data/
+IBM. (2025). What is data visualization? https://www.ibm.com/think/topics/data-visualization
+Lutfiyah, N., Hamdani, A., & Prabowo, C. (2024). Perancangan Dashboard Digital Untuk Monitoring Kinerja Organisasi Pada PT PLN (Persero). Journal Artificial: Informatika dan Sistem Informasi. https://doi.org/10.5281/zenodo.17143102
+openpyxl. (2024). openpyxl (PyPI). https://pypi.org/project/openpyxl/
+pandas development team. (2026). pandas documentation (stable). https://pandas.pydata.org/pandas-docs/stable/
+PostgreSQL Global Development Group. (2025). PostgreSQL: The world’s most advanced open source database. https://www.postgresql.org/
+Pressman, R. S., & Maxim, B. R. (2020). Software Engineering: A Practitioner’s Approach (9th ed.). McGraw-Hill Education.
+PT PLN (Persero). (2024). Annual Report 2024. PLN Energi Indonesia. https://www.pln.co.id.
+PT PLN (Persero). (2026). Profil Perusahaan (Visi dan Misi). https://web.pln.co.id/tentang-kami/profil-perusahaan
+Purdue University. (2026). Conducting Primary Research. Purdue OWL®. https://owl.purdue.edu/owl/research_and_citation/conducting_research/conducting_primary_research/index.html
+Priskilla, V. G., Oslan, Y., & Ernawati, L. (2021). Implementasi Dashboard Untuk Visualisasi Data. Jurnal Terapan Teknologi Informasi, 5(2), 11–23. https://doi.org/10.21460/jutei.2021.52.234
+Python Software Foundation. (2025). What is Python? Executive Summary. https://www.python.org/doc/essays/blurb/
+SQLAlchemy. (2025). SQLAlchemy Documentation. https://docs.sqlalchemy.org/
+Zahir, A., Patresia, P., & Sugianto, L. (2024). Rancang Bangun Sistem Informasi Berbasis Website. Jurnal Artificial, 2(2). https://doi.org/10.54065/artificial.2.2.2024.551
+  

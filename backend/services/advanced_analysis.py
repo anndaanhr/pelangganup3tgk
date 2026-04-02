@@ -176,14 +176,15 @@ class AdvancedAnalysisService:
             # Optimization: Don't sort in SQL unless we have a computed column
             # We will fetch and compute in python using optimized list comprehension
                 
-            query = text(sql)
+            query = text(sql).execution_options(stream_results=True)
             # Use session.execute instead of manual connection to be safer with ORM session state
+            # Iterate using yield_per to stream the result instead of fetching all at once into RAM
             result = self.db.execute(query, params)
             
             anomalies = []
             
-            # Fast iteration
-            for row in result:
+            # Fast iteration - fetch 2000 rows at a time
+            for row in result.yield_per(2000):
                 # row: idpel, nama, alamat, m1, m2... m12
                 # 0, 1, 2, 3..14
                 
@@ -262,6 +263,11 @@ class AdvancedAnalysisService:
             # Sort in memory (Python is decent at sorting 100k items)
             # If anomalies list > 100k, we might want to trim it
             anomalies.sort(key=lambda x: x['range'], reverse=True)
+            
+            # MEMORY OPTIMIZATION 🔥: Hanya simpan 1500 data anomali paling ekstrem per filter
+            # Pegawai jarang melihat tabel anomali lebih dari 30 halaman (1500 data).
+            # Ini akan menghemat RAM server secara drastis!
+            anomalies = anomalies[:1500]
             
             # Save to Cache
             _MEMORY_CACHE[cache_key] = {
@@ -387,13 +393,13 @@ class AdvancedAnalysisService:
             sql += " AND c25.unitup = :unitup"
             params['unitup'] = unitup
 
-        query = text(sql)
-        result = self.db.execute(query, params).fetchall()
+        query = text(sql).execution_options(stream_results=True)
+        result = self.db.execute(query, params)
         
         upgrades = []
         downgrades = []
         
-        for row in result:
+        for row in result.yield_per(2000):
             item = {
                 "idpel": row.idpel,
                 "nama": row.nama,
@@ -406,6 +412,10 @@ class AdvancedAnalysisService:
             else:
                 downgrades.append(item)
                 
+        # MEMORY OPTIMIZATION 🔥: Hanya kembalikan 150 data teratas agar browser tidak hang
+        upgrades.sort(key=lambda x: x['diff'], reverse=True)
+        downgrades.sort(key=lambda x: abs(x['diff']), reverse=True)
+        
         return {
             "summary": {
                 "total_upgrades": len(upgrades),
@@ -413,8 +423,8 @@ class AdvancedAnalysisService:
                 "total_kva_added": sum(u["diff"] for u in upgrades) / 1000,
                 "total_kva_reduced": abs(sum(d["diff"] for d in downgrades)) / 1000
             },
-            "upgrades": upgrades, # Return ALL data
-            "downgrades": downgrades # Return ALL data
+            "upgrades": upgrades[:150], 
+            "downgrades": downgrades[:150] 
         }
 
     def get_daya_distribution(self, year: int = 2025, unitup: int = None):
